@@ -156,8 +156,9 @@ const Experience = () => {
                   intensity={0.6}
                   contactShadow={false}
                 >
-                  <primitive object={model} scale={0.8} />
-                </Stage>
+                  {model && (
+                    <primitive object={model} scale={0.8} />
+                  )}                </Stage>
               </PresentationControls>
             </group>
           </Canvas>
