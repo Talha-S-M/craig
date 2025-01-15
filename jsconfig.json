@@ -2,12 +2,6 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "target": "ES6",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "strict": true,
-    "jsx": "react-jsx",
-    "esModuleInterop": true
+    }
   }
 }
