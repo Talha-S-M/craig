@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Source Sans 3", serif;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .hb-btn {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .hb-btn:hover {
+            background-color: #1D9AC9;
+        }
+
+        .container {
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .main-title h1 {
+            color: #666666;
+            font-size: 30px;
+            font-weight: 300;
+            margin: 0 0 7px;
+            padding: 4px 0 5px 0;
+            text-transform: uppercase;
+            border-bottom: 1px dotted #CCCCCC;
+        }
+
+        .hb-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+
+        .hb-col-md-7 {
+            max-width: 65%;
+            flex: 0 0 65%;
+            padding: 0 15px;
+        }
+
+        .hb-col-md-5 {
+            max-width: 35%;
+            flex: 0 0 35%;
+            padding: 0 15px;
+        }
+
+        .steps {
+            background-color: #E6E6E6;
+            height: 100%;
+        }
+
+        .optionsStepTitle {
+            padding: 20px;
+            background-color: #333333;
+            color: #fff;
+            line-height: 1.5;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .builderIntro {
+            padding: 0 20px 20px;
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: 15px;
+        }
+
+        .builderIntro p {
+            padding-bottom: 5px;
+        }
+
+        .builderIntro p.bold {
+            font-weight: 600;
+        }
+
+        .tick-mark,
+        .hb-builder--model a:hover {
+            color: #1D9AC9;
+            border-color: #1D9AC9;
+
+        }
+
+        .option-naviator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-naviator a {
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            text-decoration: none;
+            height: 25px;
+            width: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ddd;
+        }
+
+        .option-naviator i {
+            font-size: 18px;
+        }
+
+        .selects-box {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hb-steps {
+            display: none;
+        }
+
+        .hb-steps.active {
+            display: block;
+        }
+
+        .image-hb-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eaeaea;
+            padding: 20px;
+        }
+
+        .image-hb-steps img {
+            max-width: 80%;
+            height: auto;
+        }
+
+        .info-hb-steps h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #333;
+        }
+
+        .info-hb-steps .price {
+            font-size: 18px;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .info-hb-steps label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .info-hb-steps select {
+            box-sizing: border-box;
+            border: 0px;
+            border-bottom: 1px solid #cacaca;
+            background: #f4f4f4;
+            color: #333333;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-hb-steps .options {
+            padding: 10px;
+            font-size: 16px;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .info-hb-steps .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-hb-steps .options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-hb-steps .options input[type="radio"] {
+            accent-color: #333;
+        }
+
+        .info-hb-steps .color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-hb-steps .color-grid .color-box {
+            position: relative;
+            width: 54px;
+            height: 54px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .color-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: url(https://jancraigheadcovers.com/cms/images/layout/builder_swatch_over.png);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .info-hb-steps .color-grid .color-box.selected {
+            border-color: #333;
+        }
+
+        .info-hb-steps .details {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .info-hb-steps .details a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .info-hb-steps .details a:hover {
+            text-decoration: underline;
+        }
+
+        .groupBlock {
+            border-bottom: 1px dotted #cccccc;
+            padding: 15px 0 5px 0;
+            margin-bottom: 20px;
+        }
+
+        .groupBlock .total {
+            font-size: 25;
+            text-align: right;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #333333;
+            margin: 0 0 10px 0;
+            text-align: right;
+
+        }
+
+        .groupBlock .total .num {
+            font-size: 30px;
+            font-weight: 400;
+        }
+
+        .tab {
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        .tab .tablinks {
+            float: left;
+            width: 33.3%;
+            padding: 10px 9px;
+            color: #999999;
+            font-size: 1em;
+            font-weight: 700;
+            background: #ffffff;
+            border-bottom: 1px solid #b6b6b6;
+            text-decoration: none;
+            padding: 10px 15px;
+            text-transform: uppercase;
+            position: relative;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        .tab .tablinks:hover {
+            color: #999999;
+        }
+        .tab .tablinks.active {
+            background-color: #333333;
+            color: #fff;
+        }
+
+        .tab .tablinks.active::before {
+            position: absolute;
+            content: '';
+            bottom: -5px;
+            left: 50%;
+            margin-left: -6px;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 6px solid #333333;
+        }
+        .tabcontent {
+            display: none;
+            padding: 70px 17px 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hb-builder--model">
+        <div class="container">
+            <div class="hb-row">
+                <div class="hb-col-md-7">
+                    <div class="main-title">
+                        <h1>Design Your Headcover</h1>
+                    </div>
+                    <div class="image-box">
+                        <img src="https://www.jancraigheadcovers.com/cms/images/club/Mallet-Blade/Toppers/Tassels/Shadow/shadow.png"
+                            alt="img">
+                    </div>
+                </div>
+                <div class="hb-col-md-5">
+                    <div class="steps">
+
+                        <!-- Step 1 -->
+                        <div class="hb-steps active" id="step-1">
+                            <div class="info-hb-steps">
+                                <div class="optionsStepTitle">
+                                    <h2>1 <span class="tick-mark"><i class="fa-solid fa-check"></i></span> Club &
+                                        Pom/Tassel</h2>
+                                    <div class="option-naviator">
+                                        <a href="#" class="angle-left"><i class="fa-solid fa-angle-left"></i></a>
+                                        <a href="#" class="angle-right"><i class="fa-solid fa-angle-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="selects-box">
+                                    <label for="club">Select Club</label>
+                                    <select id="club">
+                                        <option value="">-select-</option>
+                                        <option value="driver-460">Driver 460</option>
+                                        <option value="driver-360">Driver 360</option>
+                                        <option value="fairway">Fairway</option>
+                                        <option value="hybrid">Hybrid</option>
+                                        <option value="putter-blade">Putter Blade</option>
+                                        <option value="putter-mallet">Putter Mallet</option>
+                                    </select>
+                                    <label>Select POM/Tassel</label>
+                                    <div class="options">
+                                        <label><input type="radio" name="pom-tassel" value="5in-pom"> 5in. POM</label>
+                                        <label><input type="radio" name="pom-tassel" value="8in-pom"> 8in. POM</label>
+                                        <label><input type="radio" name="pom-tassel" value="tassel"> Tassel</label>
+                                        <label><input type="radio" name="pom-tassel" value="none"> NONE</label>
+                                    </div>
+                                    <button class="hb-btn" id="to-step-2">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hb-steps" id="step-2">
+                            <div class="info-hb-steps">
+
+                                <div class="optionsStepTitle">
+                                    <h2>2 <span class="tick-mark"><i class="fa-solid fa-check"></i></span> Sleeve Color
+                                    </h2>
+                                    <div class="option-naviator">
+                                        <a href="#"><i class="fa-solid fa-angle-left"></i></a>
+                                        <a href="#"><i class="fa-solid fa-angle-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="selects-box">
+                                    <label for="sleeve-color">Select Sleeve Color</label>
+                                    <div id="sleeve-color" class="color-grid">
+                                        <div class="color-box" style="background-color: rgb(146, 7, 7);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: red;" data-color="Red"></div>
+                                        <div class="color-box" style="background-color: rgb(89, 255, 0);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: rgb(0, 255, 251);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: rgb(8, 0, 255);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: red;" data-color="Red"></div>
+                                        <div class="color-box" style="background-color: orange;" data-color="Orange">
+                                        </div>
+                                        <div class="color-box" style="background-color: yellow;" data-color="Yellow">
+                                        </div>
+                                        <div class="color-box" style="background-color: green;" data-color="Green">
+                                        </div>
+                                        <div class="color-box" style="background-color: rgb(255, 0, 234);"
+                                            data-color="Blue"></div>
+                                        <div class="color-box" style="background-color: purple;" data-color="Purple">
+                                        </div>
+                                        <div class="color-box" style="background-color: yellow;" data-color="Yellow">
+                                        </div>
+                                        <div class="color-box" style="background-color: rgb(110, 223, 110);"
+                                            data-color="Green">
+                                        </div>
+                                        <div class="color-box" style="background-color: rgb(255, 0, 111);"
+                                            data-color="Blue"></div>
+                                        <div class="color-box" style="background-color: rgb(128, 0, 47);"
+                                            data-color="Purple"></div>
+                                        <div class="color-box" style="background-color: rgb(146, 7, 7);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: red;" data-color="Red"></div>
+                                        <div class="color-box" style="background-color: rgb(89, 255, 0);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: rgb(0, 255, 251);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: rgb(8, 0, 255);"
+                                            data-color="Red"></div>
+                                        <div class="color-box" style="background-color: red;" data-color="Red"></div>
+                                        <div class="color-box" style="background-color: orange;" data-color="Orange">
+                                        </div>
+                                        <div class="color-box" style="background-color: yellow;" data-color="Yellow">
+                                        </div>
+                                    </div>
+                                    <button class="hb-btn" id="to-step-3">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="hb-steps" id="step-4">
+                            <div class="info-hb-steps">
+                                <div class="optionsStepTitle">
+                                    <h2>1 <span class="tick-mark"><i class="fa-solid fa-check"></i></span> Club &
+                                        Pom/Tassel</h2>
+                                    <div class="option-naviator">
+                                        <a href="#" class="angle-left"><i class="fa-solid fa-angle-left"></i></a>
+                                        <a href="#" class="angle-right"><i class="fa-solid fa-angle-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="selects-box">
+                                    <label for="cl">Select Club</label>
+                                    <select id="cl">
+                                        <option value="">-select-</option>
+                                        <option value="driver-460">Driver 460</option>
+                                        <option value="driver-360">Driver 360</option>
+                                        <option value="fairway">Fairway</option>
+                                        <option value="hybrid">Hybrid</option>
+                                        <option value="putter-blade">Putter Blade</option>
+                                        <option value="putter-mallet">Putter Mallet</option>
+                                    </select>
+                                    <label>Select POM/Tassel</label>
+                                    <div class="options">
+                                        <label><input type="radio" name="pom-tassel" value="5in-pom"> 5in. POM</label>
+                                        <label><input type="radio" name="pom-tassel" value="8in-pom"> 8in. POM</label>
+                                        <label><input type="radio" name="pom-tassel" value="tassel"> Tassel</label>
+                                        <label><input type="radio" name="pom-tassel" value="none"> NONE</label>
+                                    </div>
+                                    <button class="hb-btn" id="to-step-5">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hb-steps" id="step-5">
+                            <div class="info-hb-steps">
+                                <div class="optionsStepTitle">
+                                    <h2>5 <span class="tick-mark"><i class="fa-solid fa-check"></i></span> Confirm
+                                        Selections</h2>
+                                    <div class="option-naviator">
+                                        <a href="#" class="angle-left"><i class="fa-solid fa-angle-left"></i></a>
+                                        <a href="#" class="angle-right"><i class="fa-solid fa-angle-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="selects-box">
+                                    <label for="sleve_length">Add Extra 2IN. to Sleeve Length</label>
+                                    <select id="sleve_length">
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                    <label for="special_request">Special Requests</label>
+                                    <select id="special_request">
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                    <div class="groupBlock">
+                                        <div class="total">
+                                            Final Total: <span class="num">$88.00</span>
+                                        </div>
+                                    </div>
+
+                                    <button class="hb-btn" id="Addtocard">Add To Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const steps = document.querySelectorAll('.hb-steps');
+        const leftArrows = document.querySelectorAll('.angle-left');
+        const rightArrows = document.querySelectorAll('.angle-right');
+        let currentStep = 0;
+        function showStep(step) {
+            steps.forEach((section, index) => {
+                section.classList.toggle('active', index === step);
+            });
+            updateArrowVisibility();
+        }
+        function updateArrowVisibility() {
+            leftArrows.forEach(arrow => arrow.style.display = currentStep > 0 ? 'flex' : 'none');
+            rightArrows.forEach(arrow => {
+                const isStepValid = validateCurrentStep();
+                arrow.style.display = isStepValid ? 'flex' : 'none';
+            });
+        }
+        function validateCurrentStep() {
+            if (currentStep === 0) {
+                const clubSelected = document.getElementById('club').value !== '';
+                const pomSelected = document.querySelector('input[name="pom-tassel"]:checked') !== null;
+                toggleTickMark(0, clubSelected && pomSelected);
+                return clubSelected && pomSelected;
+            }
+            if (currentStep === 1) {
+                const colorSelected = document.querySelector('#sleeve-color .color-box.selected') !== null;
+                toggleTickMark(1, colorSelected);
+                return colorSelected;
+            }
+            if (currentStep === 2) {
+                const pomColorOptionSelected = document.getElementById('pom-color').value !== '';
+                // Check if at least one color is selected in the first tab
+                const firstColorSelected = document.querySelector('#firstcolor .color-box.selected') !== null;
+                toggleTickMark(2, pomColorOptionSelected && firstColorSelected);
+                return pomColorOptionSelected && firstColorSelected;
+            }
+            if (currentStep === 3) {
+                const cl = document.getElementById('cl').value !== '';
+                const pomTasselSelected = document.querySelector('#step-4 input[name="pom-tassel"]:checked') !== null;
+                toggleTickMark(3, cl && pomTasselSelected);
+                return cl && pomTasselSelected;
+            }
+            if (currentStep === 4) {
+                const sleveLength = document.getElementById('sleve_length').value !== '';
+                const specialRequest = document.getElementById('special_request').value !== '';
+                toggleTickMark(4, sleveLength && specialRequest);
+                return sleveLength && specialRequest;
+            }
+            return true;
+        }
+        function toggleTickMark(step, isValid) {
+            const tickMark = steps[step].querySelector('.tick-mark');
+            if (tickMark) {
+                tickMark.style.display = isValid ? 'inline-block' : 'none';
+            }
+        }
+        document.getElementById('to-step-2').addEventListener('click', () => {
+            if (!validateCurrentStep()) {
+                alert('Please complete all fields before proceeding.');
+                return;
+            }
+            currentStep = 1;
+            showStep(currentStep);
+        });
+
+        document.getElementById('to-step-3').addEventListener('click', () => {
+            if (!validateCurrentStep()) {
+                alert('Please complete all fields before proceeding.');
+                return;
+            }
+            currentStep = 2;
+            showStep(currentStep);
+        });
+
+        document.getElementById('to-step-4').addEventListener('click', () => {
+            if (!validateCurrentStep()) {
+                alert('Please complete all fields before proceeding.');
+                return;
+            }
+            currentStep = 3;
+            showStep(currentStep);
+        });
+
+        document.getElementById('to-step-5').addEventListener('click', () => {
+            if (!validateCurrentStep()) {
+                alert('Please complete all fields before proceeding.');
+                return;
+            }
+            currentStep = 4;
+            showStep(currentStep);
+        });
+        document.getElementById('Addtocard').addEventListener('click', () => {
+            if (!validateCurrentStep()) {
+                alert('Please complete all fields before adding to cart.');
+                return;
+            }
+            // Add your cart functionality here
+            alert('Product added to cart successfully!');
+        });
+        leftArrows.forEach((arrow) => {
+            arrow.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        rightArrows.forEach((arrow) => {
+            arrow.addEventListener('click', () => {
+                if (validateCurrentStep()) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        document.getElementById('club').addEventListener('change', updateArrowVisibility);
+        document.querySelectorAll('input[name="pom-tassel"]').forEach((input) => {
+            input.addEventListener('change', updateArrowVisibility);
+        });
+
+        document.querySelectorAll('#sleeve-color .color-box').forEach((box) => {
+            box.addEventListener('click', () => {
+                document.querySelectorAll('#sleeve-color .color-box').forEach((b) => b.classList.remove('selected'));
+                box.classList.add('selected');
+                updateArrowVisibility();
+            });
+        });
+
+        document.getElementById('pom-color').addEventListener('change', updateArrowVisibility);
+        document.querySelectorAll('.tabcontent .color-box').forEach((box) => {
+            box.addEventListener('click', () => {
+                const tabContent = box.closest('.tabcontent');
+                tabContent.querySelectorAll('.color-box').forEach((b) => b.classList.remove('selected'));
+                box.classList.add('selected');
+                updateArrowVisibility();
+            });
+        });
+        document.getElementById('cl').addEventListener('change', updateArrowVisibility);
+        document.querySelectorAll('#step-4 input[name="pom-tassel"]').forEach((input) => {
+            input.addEventListener('change', updateArrowVisibility);
+        });
+        document.getElementById('sleve_length').addEventListener('change', updateArrowVisibility);
+        document.getElementById('special_request').addEventListener('change', updateArrowVisibility);
+        showStep(currentStep);
+    </script>
+
+
+    <!-- tabs -->
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+
+ <svg
+                    width="100%"
+                    height="100%"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                    }}
+                  >
+                    <defs>
+                      <pattern
+                        id="textTexturePattern"
+                        patternUnits="userSpaceOnUse"
+                        width="40"
+                        height="40"
+                      >
+                        <image
+                          href="/assets/thread_repeat.png"
+                          x="0"
+                          y="0"
+                          width="40"
+                          height="40"
+                        />
+                      </pattern>
+
+                      <clipPath id="textClipPath">
+                        <text
+                          x="50%"
+                          y="50%"
+                          textAnchor="middle"
+                          alignmentBaseline="middle"
+                          fontSize="40"
+                          fontWeight="bold"
+                          fontFamily="Arial, sans-serif"
+                        >
+                          {initial}
+                        </text>
+                      </clipPath>
+                    </defs>
+                    <rect
+                      width="100%"
+                      height="100%"
+                      style={{
+                        backgroundImage: "url(#textTexturePattern)",
+                        fill:"#ADD8E6"
+                      }}
+                      clipPath="url(#textClipPath)"
+                    />
+                    <text
+                      x="50%"
+                      y="50%"
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
+                      fontSize="40"
+                      fontWeight="bold"
+                      fontFamily="Arial, sans-serif"
+                      // fill={desiredColor || "#ADD8E6"}
+                      fill={"#ADD8E6"}
+                      opacity="0.7" // Blend it with texture (adjust as needed)
+                    >
+                      {initial}
+                    </text>
+                  </svg>
