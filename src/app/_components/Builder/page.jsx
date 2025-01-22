@@ -436,8 +436,8 @@ const StepToppings = ({
             id="toppings"
             className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
             onChange={(e) => {
-              setToppingColors([]);
               setTopping(e.target.value);
+              setToppingColors([]);
             }}
           >
             <option value="">-select-</option>
@@ -465,7 +465,7 @@ const StepToppings = ({
                 <option value="2"> 2 Colors</option>
                 <option value="2f"> 2 Colors, FLECKS</option>
                 <option value="3"> 3 Colors</option>
-                <option value="4"> 4 Colors</option>
+                {/* <option value="4"> 4 Colors</option> */}
               </select>
               {toppingType && (
                 <div className="mt-2">
@@ -478,7 +478,6 @@ const StepToppings = ({
                       return (
                         <div
                           onClick={() => {
-                            console.log(color.value);
                             handleToppingColor(color.value);
                           }}
                           key={index}

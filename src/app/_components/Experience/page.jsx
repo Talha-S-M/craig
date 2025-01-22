@@ -21,6 +21,7 @@ const Experience = () => {
   const [club, setClub] = useState(null);
   const [topping, setTopping] = useState(null);
   const [toppingType, setToppingType] = useState(null);
+  const [toppingColor, setToppingColors] = useState([]);
 
   useEffect(() => {
     const loader = new GLTFLoader();
@@ -87,13 +88,89 @@ const Experience = () => {
     }
   }, [toppingModel, club]);
 
+  useEffect(() => {
+    if (toppingColor && toppingModel) {
+      if (Array.isArray(toppingColor) && toppingColor.length === 0) {
+        console.log('empty array')
+          toppingModel.traverse((child) => {
+            if (child.isMesh) {
+              child.material.color.set('rgb(255, 255, 255)');
+            }
+          });
+        return;
+      } else {
+        toppingModel.traverse((child) => {
+          if (toppingType == "1") {
+            if (child.isMesh) {
+              child.material.color.set(toppingColor);
+            }
+            return;
+          }
+        if (topping == "tassel") {
+           if (toppingType == "2") {
+              toppingModel.traverse((child) => {
+                if (child.isMesh && child.name == "Tasselstring_1") {
+                  child.material.color.set(toppingColor[0]);
+                } else if(child.isMesh) {
+                  child.material.color.set(toppingColor[1]);
+                }
+              });
+            } else if (toppingType == "2f") {
+              if (child.isMesh && child.name == "Tasselstring_1") {
+                child.material.color.set(toppingColor[0]);
+              } else if (child.isMesh && child.name == "Tasselstring_2") {
+                child.material.color.set(toppingColor[0]);
+              }else if(child.isMesh){
+                child.material.color.set(toppingColor[1]);
+              }
+            } else if (toppingType == "3") {
+              if (child.isMesh && child.name == "Tasselstring_1") {
+                child.material.color.set(toppingColor[0]);
+              } else if (child.isMesh && child.name == "Tasselstring_2") {
+                child.material.color.set(toppingColor[1]);
+              } else if (child.isMesh && child.name == "Tasselstring_3fleck") {
+                child.material.color.set(toppingColor[2]);
+              }
+            }
+        } else {
+            if (toppingType == "2") {
+            toppingModel.traverse((child) => {
+              if (child.isMesh && child.name.includes('instring_1')) {
+                child.material.color.set(toppingColor[0]);
+              } else if(child.isMesh) {
+                child.material.color.set(toppingColor[1]);
+              }
+            });
+          } else if (toppingType == "2f") {
+            if (child.isMesh && child.name.includes('instring_1')) {
+              child.material.color.set(toppingColor[0]);
+            } else if (child.isMesh && child.name.includes('instring_2')) {
+              child.material.color.set(toppingColor[0]);
+            }else if(child.isMesh){
+              child.material.color.set(toppingColor[1]);
+            }
+          } else if (toppingType == "3") {
+            if (child.isMesh && child.name.includes('instring_1')) {
+              child.material.color.set(toppingColor[0]);
+            } else if (child.isMesh && child.name.includes('instring_2')) {
+              child.material.color.set(toppingColor[1]);
+            } else if (child.isMesh && child.name.includes('instring_3fleck')) {
+              child.material.color.set(toppingColor[2]);
+            }
+          }
+        }
+      });
+
+      }
+    }
+  }, [toppingColor, topping]);
+
   const [selectedColor, setSelectedColor] = useState(null);
   const [detailType, setDetailType] = useState(null);
   const [stripesNum, setStripesNum] = useState(null);
   const [stripesColors, setStripesColors] = useState([]);
   const [pattern, setPattern] = useState(null);
   const [initial, setInitial] = useState(null);
-  const [toppingColor, setToppingColors] = useState([]);
 
   //remove after done
   const [meshNames, setMeshNames] = useState([]);
@@ -107,9 +184,9 @@ const Experience = () => {
       });
       setMeshNames(names);
     }
-  }, [model]);
+  }, [model, toppingModel]);
 
-  // console.log(meshNames);
+  console.log(meshNames);
   //
 
   useEffect(() => {
@@ -203,7 +280,7 @@ const Experience = () => {
             const orderedStripes = driverVisualOrder.filter((stripe) =>
               selectedStripes.includes(stripe)
             );
-        
+
             modelRef.current.traverse((child) => {
               if (child.isMesh && orderedStripes.includes(child.name)) {
                 const stripeIndex = orderedStripes.indexOf(child.name);
