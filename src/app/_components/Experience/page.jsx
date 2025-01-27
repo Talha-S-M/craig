@@ -6,64 +6,7 @@ import * as THREE from "three";
 import { PresentationControls, Stage } from "@react-three/drei";
 import Builder from "../Builder/page";
 
-// function usePricing(baseConfig, personalizeConfig) {
-//   const [price, setPrice] = useState(199);
-//   useEffect(() => {
-//     const priceAffectingOptions = {
-//       // define price affecting options here
-//       thumb: personalizeConfig["Thumb Logo/Graphic"],
-//     };
 
-//     let newPrice = 199;
-//     if (priceAffectingOptions.thumb === "Graphic (+$7)") {
-//       newPrice += 7;
-//     }
-//     if (priceAffectingOptions.thumb === "Premium Graphic (+$15)") {
-//       newPrice += 15;
-//     }
-
-//     setPrice(newPrice);
-//   }, [
-//     baseConfig.logo_style,
-//     baseConfig.inlay,
-//     baseConfig.kippalm,
-//     baseConfig,
-//     personalizeConfig,
-//   ]);
-
-//   return { price }; // return price for usage
-// }
-
-// const setColor = (value) => {
-
-// }
-
-// const handlePeronalizeChangeText = (e) => {
-//   let value = e.target.value;
-
-//   if (data[currentPersonlize].texttype === "number") {
-//     if (value.length > 2) {
-//       value = value.slice(0, 2);
-//     }
-//     setPersonlizeConfig((prevOption) => ({
-//       ...prevOption,
-//       [currentPersonlize]: value,
-//     }));
-//   } else if (data[currentPersonlize].texttype === "long_text") {
-//     setPersonlizeConfig((prevOption) => ({
-//       ...prevOption,
-//       [currentPersonlize + " Text"]: value,
-//     }));
-//   } else {
-//     if (value.length > 17) {
-//       value = value.slice(0, 17);
-//     }
-//     setPersonlizeConfig((prevOption) => ({
-//       ...prevOption,
-//       [currentPersonlize + " Text"]: value,
-//     }));
-//   }
-// };
 
 const Experience = () => {
   // const dracoLoader = new DRACOLoader();
@@ -180,3 +123,62 @@ const Experience = () => {
 };
 
 export default Experience;
+
+// function usePricing(baseConfig, personalizeConfig) {
+//   const [price, setPrice] = useState(199);
+//   useEffect(() => {
+//     const priceAffectingOptions = {
+//       // define price affecting options here
+//       thumb: personalizeConfig["Thumb Logo/Graphic"],
+//     };
+
+//     let newPrice = 199;
+//     if (priceAffectingOptions.thumb === "Graphic (+$7)") {
+//       newPrice += 7;
+//     }
+//     if (priceAffectingOptions.thumb === "Premium Graphic (+$15)") {
+//       newPrice += 15;
+//     }
+
+//     setPrice(newPrice);
+//   }, [
+//     baseConfig.logo_style,
+//     baseConfig.inlay,
+//     baseConfig.kippalm,
+//     baseConfig,
+//     personalizeConfig,
+//   ]);
+
+//   return { price }; // return price for usage
+// }
+
+// const setColor = (value) => {
+
+// }
+
+// const handlePeronalizeChangeText = (e) => {
+//   let value = e.target.value;
+
+//   if (data[currentPersonlize].texttype === "number") {
+//     if (value.length > 2) {
+//       value = value.slice(0, 2);
+//     }
+//     setPersonlizeConfig((prevOption) => ({
+//       ...prevOption,
+//       [currentPersonlize]: value,
+//     }));
+//   } else if (data[currentPersonlize].texttype === "long_text") {
+//     setPersonlizeConfig((prevOption) => ({
+//       ...prevOption,
+//       [currentPersonlize + " Text"]: value,
+//     }));
+//   } else {
+//     if (value.length > 17) {
+//       value = value.slice(0, 17);
+//     }
+//     setPersonlizeConfig((prevOption) => ({
+//       ...prevOption,
+//       [currentPersonlize + " Text"]: value,
+//     }));
+//   }
+// };
