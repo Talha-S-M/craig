@@ -394,7 +394,8 @@ const Experience = () => {
           }
         });
       }
-    } else if (club == "t-blade-putter") {
+    } else if (club == "t-putter-blade") {
+      console.log('cluc');
       if (pattern == "candy-stripe") {
         modelRef.current.traverse((child) => {
           if (candyColor.length > 0) {
@@ -410,9 +411,9 @@ const Experience = () => {
             if (child.isMesh && child.name === "PutterBladecandy_head_B") {
               child.material.color.set(candyColor[0]);
             }
-            // if (child.isMesh && child.name === "Hybrid-stripe2") {
-            //   child.material.color.set(candyColor[0]);
-            // }
+            if (child.isMesh && child.name === "PutterBladestripe1") {
+              child.material.color.set(candyColor[0]);
+            }
           }
         });
       }
@@ -536,7 +537,6 @@ const Experience = () => {
   useEffect(() => {
     if (club) {
       if (club == "t-putter-blade") {
-        // console.log("here");
         if (pattern == "solid") {
           if (modelRef.current && stripesColors) {
             modelRef.current.traverse((child) => {
@@ -545,20 +545,6 @@ const Experience = () => {
                   child.material.color.set(stripesColors);
                 }
               }
-              //  else {
-              //   if (child.isMesh && child.name === "PutterBladecandy_main_A") {
-              //     child.material.color.set(stripesColors[0]);
-              //   }
-              //   if (child.isMesh && child.name === "PutterBladecandy_main_B") {
-              //     child.material.color.set(stripesColors[1]);
-              //   }
-              //   if (child.isMesh && child.name === "PutterBladecandy_head_B") {
-              //     child.material.color.set(stripesColors[0]);
-              //   }
-              //   if (child.isMesh && child.name === "PutterBladecandy_head_A") {
-              //     child.material.color.set(stripesColors[1]);
-              //   }
-              // }
             });
           }
         } else if (pattern == "candy-stripe") {
