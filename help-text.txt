@@ -752,3 +752,34 @@
                       {initial}
                     </text>
                   </svg>
+
+
+                   // const colorToApply =
+                  //   stripesColors.length === 2
+                  //     ? stripesColors[stripeIndex % 2]
+                  //     : stripeIndex === Math.floor(selectedStripes.length / 2)
+                  //     ? stripesColors[0]
+                  //     : stripesColors[1];
+
+                  // child.material.color.set(colorToApply);
+
+
+
+
+
+
+
+
+
+
+                   // "Driver460-stripe7"
+  // "Driver460-candy_main_A"
+  // "Driver460-candy_main_B"
+  // "Driver460-candy_head_B"
+  // "Driver460-candy_head_A"
+  // "Driver460-stripe4"
+  // "Driver460-stripe6"
+  // "Driver460-stripe2"
+  // "Driver460-stripe1"
+  // "Driver460-stripe5"
+  // "Driver460-stripe3"

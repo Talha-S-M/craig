@@ -8,6 +8,10 @@ import Builder from "../Builder/page";
 import {
   driverStripeGroups,
   driverVisualOrder,
+  fairwayStripeGroups,
+  fairwayVisualOrder,
+  hybridStripeGroups,
+  hybridVisualOrder,
   models,
   stripeIndexOrder,
   topppingModels,
@@ -21,6 +25,7 @@ const Experience = () => {
   const [club, setClub] = useState(null);
   const [topping, setTopping] = useState(null);
   const [toppingType, setToppingType] = useState(null);
+  const [sleveLength, setSleveLength] = useState(null);
   const [toppingColor, setToppingColors] = useState([]);
 
   useEffect(() => {
@@ -91,12 +96,12 @@ const Experience = () => {
   useEffect(() => {
     if (toppingColor && toppingModel) {
       if (Array.isArray(toppingColor) && toppingColor.length === 0) {
-        console.log('empty array')
-          toppingModel.traverse((child) => {
-            if (child.isMesh) {
-              child.material.color.set('rgb(255, 255, 255)');
-            }
-          });
+        console.log("empty array");
+        toppingModel.traverse((child) => {
+          if (child.isMesh) {
+            child.material.color.set("rgb(255, 255, 255)");
+          }
+        });
         return;
       } else {
         toppingModel.traverse((child) => {
@@ -106,12 +111,12 @@ const Experience = () => {
             }
             return;
           }
-        if (topping == "tassel") {
-           if (toppingType == "2") {
+          if (topping == "tassel") {
+            if (toppingType == "2") {
               toppingModel.traverse((child) => {
                 if (child.isMesh && child.name == "Tasselstring_1") {
                   child.material.color.set(toppingColor[0]);
-                } else if(child.isMesh) {
+                } else if (child.isMesh) {
                   child.material.color.set(toppingColor[1]);
                 }
               });
@@ -120,7 +125,7 @@ const Experience = () => {
                 child.material.color.set(toppingColor[0]);
               } else if (child.isMesh && child.name == "Tasselstring_2") {
                 child.material.color.set(toppingColor[0]);
-              }else if(child.isMesh){
+              } else if (child.isMesh) {
                 child.material.color.set(toppingColor[1]);
               }
             } else if (toppingType == "3") {
@@ -132,35 +137,37 @@ const Experience = () => {
                 child.material.color.set(toppingColor[2]);
               }
             }
-        } else {
+          } else {
             if (toppingType == "2") {
-            toppingModel.traverse((child) => {
-              if (child.isMesh && child.name.includes('instring_1')) {
+              toppingModel.traverse((child) => {
+                if (child.isMesh && child.name.includes("instring_1")) {
+                  child.material.color.set(toppingColor[0]);
+                } else if (child.isMesh) {
+                  child.material.color.set(toppingColor[1]);
+                }
+              });
+            } else if (toppingType == "2f") {
+              if (child.isMesh && child.name.includes("instring_1")) {
                 child.material.color.set(toppingColor[0]);
-              } else if(child.isMesh) {
+              } else if (child.isMesh && child.name.includes("instring_2")) {
+                child.material.color.set(toppingColor[0]);
+              } else if (child.isMesh) {
                 child.material.color.set(toppingColor[1]);
               }
-            });
-          } else if (toppingType == "2f") {
-            if (child.isMesh && child.name.includes('instring_1')) {
-              child.material.color.set(toppingColor[0]);
-            } else if (child.isMesh && child.name.includes('instring_2')) {
-              child.material.color.set(toppingColor[0]);
-            }else if(child.isMesh){
-              child.material.color.set(toppingColor[1]);
-            }
-          } else if (toppingType == "3") {
-            if (child.isMesh && child.name.includes('instring_1')) {
-              child.material.color.set(toppingColor[0]);
-            } else if (child.isMesh && child.name.includes('instring_2')) {
-              child.material.color.set(toppingColor[1]);
-            } else if (child.isMesh && child.name.includes('instring_3fleck')) {
-              child.material.color.set(toppingColor[2]);
+            } else if (toppingType == "3") {
+              if (child.isMesh && child.name.includes("instring_1")) {
+                child.material.color.set(toppingColor[0]);
+              } else if (child.isMesh && child.name.includes("instring_2")) {
+                child.material.color.set(toppingColor[1]);
+              } else if (
+                child.isMesh &&
+                child.name.includes("instring_3fleck")
+              ) {
+                child.material.color.set(toppingColor[2]);
+              }
             }
           }
-        }
-      });
-
+        });
       }
     }
   }, [toppingColor, topping]);
@@ -170,7 +177,8 @@ const Experience = () => {
   const [stripesNum, setStripesNum] = useState(null);
   const [stripesColors, setStripesColors] = useState([]);
   const [pattern, setPattern] = useState(null);
-  const [initial, setInitial] = useState(null);
+  const [initial, setInitial] = useState([]);
+  const [candyColor, setCandyColor] = useState([]);
 
   //remove after done
   const [meshNames, setMeshNames] = useState([]);
@@ -191,34 +199,306 @@ const Experience = () => {
 
   useEffect(() => {
     if (model && modelRef.current && selectedColor) {
-      if (pattern == "solid") {
-        modelRef.current.traverse((child) => {
-          if (child.isMesh) {
-            child.material.color.set(selectedColor);
-          }
-        });
-        return;
-      }
-      if (club == "driver") {
-        if (pattern == "candy-neck") {
-          modelRef.current.traverse((child) => {
-            if (child.isMesh) {
-              child.material.color.set(selectedColor);
-            }
-          });
-        } else if (pattern == "head-neck") {
-        } else if (pattern == "candy-stripe") {
-        }
-      } else if (club == "t-blade-putter") {
-      }
-
       modelRef.current.traverse((child) => {
         if (child.isMesh) {
           child.material.color.set(selectedColor);
         }
       });
+      if (pattern == "solid") {
+        return;
+      }
     }
-  }, [model, club, pattern, selectedColor]);
+    if (club == "driver") {
+      if (pattern == "candy-neck") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Driver460-candy_main_A") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_main_B") {
+              child.material.color.set(candyColor[1]);
+            }
+          }
+        });
+      } else if (pattern == "head-neck") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Driver460-candy_main_A") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_head_B") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe4") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe5") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe6") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe3") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe1") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe2") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe7") {
+              child.material.color.set(candyColor[1]);
+            }
+          }
+        });
+      } else if (pattern == "candy-stripe") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Driver460-candy_main_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-candy_head_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            // if (child.isMesh && child.name === "Driver460-stripe2") {
+            //   child.material.color.set(candyColor[0]);
+            // }
+            if (child.isMesh && child.name === "Driver460-stripe4") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe5") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe6") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe3") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe1") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Driver460-stripe2") {
+              child.material.color.set(candyColor[0]);
+            }
+
+            if (child.isMesh && child.name === "Driver460-stripe7") {
+              child.material.color.set(candyColor[0]);
+            }
+          }
+        });
+      }
+    } else if (club == "fairway") {
+      if (pattern == "candy-neck") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Fairway-candy_main_A") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_main_B") {
+              child.material.color.set(candyColor[1]);
+            }
+          }
+        });
+      } else if (pattern == "head-neck") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Fairway-candy_main_A") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_head_B") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe4") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe5") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe6") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe3") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe1") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe2") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe7") {
+              child.material.color.set(candyColor[1]);
+            }
+          }
+        });
+      } else if (pattern == "candy-stripe") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Fairway-candy_main_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-candy_head_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            // if (child.isMesh && child.name === "Fairway-stripe2") {
+            //   child.material.color.set(candyColor[0]);
+            // }
+            if (child.isMesh && child.name === "Fairway-stripe4") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe5") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe6") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe3") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe1") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Fairway-stripe2") {
+              child.material.color.set(candyColor[0]);
+            }
+
+            if (child.isMesh && child.name === "Fairway-stripe7") {
+              child.material.color.set(candyColor[0]);
+            }
+          }
+        });
+      }
+    } else if (club == "t-blade-putter") {
+      if (pattern == "candy-stripe") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "PutterBladecandy_main_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "PutterBladecandy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "PutterBladecandy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "PutterBladecandy_head_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            // if (child.isMesh && child.name === "Hybrid-stripe2") {
+            //   child.material.color.set(candyColor[0]);
+            // }
+          }
+        });
+      }
+    } else if (club == "hybrid") {
+      console.log(pattern);
+      if (pattern == "candy-neck") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Hybrid-candy_main_A") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_main_B") {
+              child.material.color.set(candyColor[1]);
+            }
+          }
+        });
+      } else if (pattern == "head-neck") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Hybrid-candy_main_A") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_head_B") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe4") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe5") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe3") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe1") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe2") {
+              child.material.color.set(candyColor[1]);
+            }
+          }
+        });
+      } else if (pattern == "candy-stripe") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "Hybrid-candy_main_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-candy_head_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            // if (child.isMesh && child.name === "Hybrid-stripe2") {
+            //   child.material.color.set(candyColor[0]);
+            // }
+            if (child.isMesh && child.name === "Hybrid-stripe4") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe5") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe3") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe1") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "Hybrid-stripe2") {
+              child.material.color.set(candyColor[0]);
+            }
+          }
+        });
+      }
+    }
+  }, [model, club, pattern, selectedColor, candyColor]);
 
   //putter meshes
 
@@ -228,9 +508,33 @@ const Experience = () => {
   // PutterBladecandy_head_B
   // PutterBladecandy_head_A
 
+  //fairway
+  // Fairway-stripe5
+  // Fairway-candy_main_A
+  // Fairway-candy_main_B
+  // Fairway-candy_head_A
+  // Fairway-candy_head_B
+  // Fairway-stripe6
+  // Fairway-stripe7
+  // Fairway-stripe3
+  // Fairway-stripe1
+  // Fairway-stripe2
+  // Fairway-stripe4
+
+  //hybrid
+
+  //   Hybrid-stripe
+  // Hybrid-candy_main_A
+  // Hybrid-candy_main_B
+  // Hybrid-candy_head_B
+  // Hybrid-candy_head_A
+  // Hybrid-stripe4
+  // Hybrid-stripe1
+  // Hybrid-stripe2
+  // Hybrid-stripe5
+
   useEffect(() => {
     if (club) {
-      console.log(club);
       if (club == "t-putter-blade") {
         // console.log("here");
         if (pattern == "solid") {
@@ -305,21 +609,83 @@ const Experience = () => {
             });
           }
         }
+      } else if (club == "fairway") {
+        if (modelRef.current && stripesColors) {
+          if (stripesColors.length > 0) {
+            const selectedStripes = fairwayStripeGroups[stripesNum] || [];
+            const orderedStripes = fairwayVisualOrder.filter((stripe) =>
+              selectedStripes.includes(stripe)
+            );
+
+            modelRef.current.traverse((child) => {
+              if (child.isMesh && orderedStripes.includes(child.name)) {
+                const stripeIndex = orderedStripes.indexOf(child.name);
+
+                if (!Array.isArray(stripesColors)) {
+                  child.material.color.set(stripesColors);
+                } else {
+                  const colorToApply = stripesColors[stripeIndex % 2];
+                  child.material.color.set(colorToApply);
+                }
+              }
+              // if (child.isMesh && selectedStripes.includes(child.name)) {
+              //   child.material.color.set(stripesColors[0]);
+              // }
+            });
+          } else if (stripesColors.length === 0) {
+            modelRef.current.traverse((child) => {
+              const selectedStripes = fairwayStripeGroups[7];
+              if (child.isMesh && selectedStripes.includes(child.name)) {
+                child.material.color.set(selectedColor);
+              }
+            });
+          }
+        }
+      } else if (club == "hybrid") {
+        if (modelRef.current && stripesColors) {
+          if (stripesColors.length > 0) {
+            const selectedStripes = hybridStripeGroups[stripesNum] || [];
+            const orderedStripes = hybridVisualOrder.filter((stripe) =>
+              selectedStripes.includes(stripe)
+            );
+
+            modelRef.current.traverse((child) => {
+              if (child.isMesh && orderedStripes.includes(child.name)) {
+                const stripeIndex = orderedStripes.indexOf(child.name);
+
+                if (!Array.isArray(stripesColors)) {
+                  child.material.color.set(stripesColors);
+                } else {
+                  const colorToApply = stripesColors[stripeIndex % 2];
+                  child.material.color.set(colorToApply);
+                }
+              }
+              // if (child.isMesh && selectedStripes.includes(child.name)) {
+              //   child.material.color.set(stripesColors[0]);
+              // }
+            });
+          } else if (stripesColors.length === 0) {
+            modelRef.current.traverse((child) => {
+              const selectedStripes = driverStripeGroups[5];
+              if (child.isMesh && selectedStripes.includes(child.name)) {
+                child.material.color.set(selectedColor);
+              }
+            });
+          }
+        }
       }
     }
   }, [stripesNum, stripesColors]);
 
-  // "Driver460-stripe7"
-  // "Driver460-candy_main_A"
-  // "Driver460-candy_main_B"
-  // "Driver460-candy_head_B"
-  // "Driver460-candy_head_A"
-  // "Driver460-stripe4"
-  // "Driver460-stripe6"
-  // "Driver460-stripe2"
-  // "Driver460-stripe1"
-  // "Driver460-stripe5"
-  // "Driver460-stripe3"
+  useEffect(() => {
+    setStripesNum(null);
+    setInitial([]);
+    setPattern(null);
+    setTopping(null);
+    setDetailType(null);
+    setSelectedColor(null);
+    setCandyColor([]);
+  }, [club]);
 
   return (
     <>
@@ -358,10 +724,18 @@ const Experience = () => {
             </group>
           </Canvas>
           <div className="relative">
-            {initial && (
+            {initial.length > 0 && (
               <div className="absolute bottom-12 right-12">
                 <div
-                  className="h-14 min-w-14 max-w-fit border-2 cursor flex items-center justify-center"
+                  className={`h-14 ${
+                    initial.length === 1
+                      ? "min-w-14"
+                      : initial.length === 2
+                      ? "min-w-20"
+                      : initial.length === 3
+                      ? "min-w-24"
+                      : "min-w-38"
+                  } min-w-14 max-w-fit border-2 cursor flex items-center justify-center`}
                   style={{
                     backgroundColor: selectedColor,
                     backgroundImage: 'url("/assets/thread_repeat.png")',
@@ -379,28 +753,22 @@ const Experience = () => {
                       left: 0,
                     }}
                   >
-                    <defs>
-                      <pattern
-                        id="textPattern"
-                        patternUnits="userSpaceOnUse"
-                        width="42"
-                        height="42"
-                        className="flex items-center justify-center"
-                      >
-                        <text
-                          x="28"
-                          y="42"
-                          textAnchor="middle"
-                          fill={stripesColors}
-                          fontSize="40"
-                          fontWeight="bold"
-                          fontFamily="Arial, sans-serif"
-                        >
-                          {initial}
-                        </text>
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#textPattern)" />
+                    <text
+                      x="50%"
+                      y={Array.isArray(initial) ? "75%" : "60%"}
+                      textAnchor="middle" // Horizontally center text
+                      fill={stripesColors}
+                      fontSize="40"
+                      fontWeight="bold"
+                      fontFamily="Arial, sans-serif"
+                      alignmentBaseline="middle" // Vertically center the text within the SVG
+                    >
+                      {Array.isArray(initial)
+                        ? initial.map((ini, index) => (
+                            <tspan key={index}>{ini}</tspan>
+                          ))
+                        : initial}
+                    </text>
                   </svg>
                 </div>
               </div>
@@ -429,6 +797,10 @@ const Experience = () => {
             setToppingColors={setToppingColors}
             toppingType={toppingType}
             setToppingType={setToppingType}
+            sleveLength={sleveLength}
+            setSleveLength={setSleveLength}
+            candyColor={candyColor}
+            setCandyColor={setCandyColor}
           />
         </div>
       </div>

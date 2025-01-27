@@ -2,18 +2,6 @@ import React, { useState } from "react";
 import { colors } from "./helpers";
 import { Button } from "../Button/page";
 
-const handleColorSelect = (color) => {
-  if (stripesColors.includes(color)) {
-    setStripesColors(
-      stripesColors.filter((selectedColor) => selectedColor !== color)
-    );
-  } else {
-    if (stripesColors.length < stripesNum) {
-      setStripesColors([...stripesColors, color]);
-    }
-  }
-};
-
 const Step1 = ({ club, setClub, pattern, setPattern, nextStep }) => {
   return (
     <div className="space-y-6 p-6">
@@ -35,6 +23,7 @@ const Step1 = ({ club, setClub, pattern, setPattern, nextStep }) => {
             id="club"
             className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
             onChange={(e) => setClub(e.target.value)}
+            value={club || ""}
           >
             <option value="">-select-</option>
             <option value="driver">Driver</option>
@@ -52,11 +41,16 @@ const Step1 = ({ club, setClub, pattern, setPattern, nextStep }) => {
               id="club"
               className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
               onChange={(e) => setPattern(e.target.value)}
+              value={pattern || ""}
             >
               <option value="">-select-</option>
               <option value="solid">SOLID HEAD & NECK</option>
-              <option value="candy-neck"> CANDY STRIPE, JUST NECK</option>
-              <option value="head-neck"> 1 HEAD COLOR, 1 NECK COLOR</option>
+              {(club == 'hybrid' || club == 'driver' || club == 'fairway') && (
+                <>
+                <option value="candy-neck"> CANDY STRIPE, JUST NECK</option>
+                <option value="head-neck"> 1 HEAD COLOR, 1 NECK COLOR</option>
+                </>
+              )}
               <option value="candy-stripe"> CANDY STRIPE, FULL COVER</option>
             </select>
           </label>
@@ -64,7 +58,11 @@ const Step1 = ({ club, setClub, pattern, setPattern, nextStep }) => {
         <Button
           name="Next"
           onClick={() => {
-            nextStep("color");
+            if (pattern == "candy-stripe" || pattern == "head-neck") {
+              nextStep("candycolor");
+            } else {
+              nextStep("color");
+            }
           }}
           disable={!club || !pattern}
         />
@@ -80,17 +78,17 @@ const StepDriverColor = ({
   pattern,
   nextStep,
 }) => {
-  const handleColorSelect = (color) => {
-    if (selectedColor.includes(color)) {
-      setSelectedColor(
-        selectedColor.filter((selectedColo) => selectedColo !== color)
-      );
-    } else {
-      if (selectedColor.length < 2) {
-        setSelectedColor([...selectedColor, color]);
-      }
-    }
-  };
+  // const handleColorSelect = (color) => {
+  //   if (selectedColor.includes(color)) {
+  //     setSelectedColor(
+  //       selectedColor.filter((selectedColo) => selectedColo !== color)
+  //     );
+  //   } else {
+  //     if (selectedColor.length < 2) {
+  //       setSelectedColor([...selectedColor, color]);
+  //     }
+  //   }
+  // };
 
   return (
     <div className="space-y-6 p-6">
@@ -121,11 +119,11 @@ const StepDriverColor = ({
               return (
                 <div
                   onClick={() => {
-                    if (pattern == "candy-stripe") {
-                      handleColorSelect(color.value);
-                    } else {
-                      setSelectedColor(color.value);
-                    }
+                    // if (pattern == "candy-stripe") {
+                    //   handleColorSelect(color.value);
+                    // } else {
+                    setSelectedColor(color.value);
+                    // }
                   }}
                   key={index}
                   className={`w-14 h-14 border-2 border-transparent cursor-pointer hover:border-gray-800 ${
@@ -149,7 +147,102 @@ const StepDriverColor = ({
           </div>
         </label>
         <button
-          onClick={() => nextStep("detail")}
+          onClick={() => {
+            if (pattern == "candy-neck" || pattern == "candy-stripe") {
+              nextStep("candycolor");
+            } else {
+              nextStep("detail");
+            }
+          }}
+          className="bg-gray-800 text-white py-2 px-6 rounded hover:bg-blue-500"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const StepCandyColor = ({
+  setCandyColor,
+  candyColor,
+  pattern,
+  nextStep,
+  prevStep,
+}) => {
+  const handleColorSelect = (color) => {
+    if (candyColor.includes(color)) {
+      setCandyColor(
+        candyColor.filter((selectedColo) => selectedColo !== color)
+      );
+    } else {
+      if (candyColor.length < 2) {
+        setCandyColor([...candyColor, color]);
+      }
+    }
+  };
+
+  return (
+    <div className="space-y-6 p-6">
+      <div className="text-lg font-bold flex justify-between items-center bg-gray-800 text-white py-2 px-4">
+        <h2>Colors</h2>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={prevStep}
+            className="p-2 border rounded-full border-gray-400 hover:border-blue-500"
+          >
+            <i className="fa-solid fa-angle-left" />
+          </button>
+          <button
+            onClick={nextStep}
+            className="p-2 border rounded-full border-gray-400 hover:border-blue-500"
+          >
+            <i className="fa-solid fa-angle-right" />
+          </button>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <label className="block">
+          <span className="font-semibold text-gray-700">
+            Select Candy Stripe Colors
+          </span>
+          <div className="grid grid-cols-5 max-lg:grid-cols-4 gap-4 mt-2">
+            {colors.map((color, index) => {
+              const isSelected = candyColor.includes(color.value);
+              return (
+                <div
+                  onClick={() => {
+                    handleColorSelect(color.value);
+                  }}
+                  key={index}
+                  className={`w-14 h-14 border-2 border-transparent cursor-pointer hover:border-gray-800 ${
+                    isSelected && "border-borderColor"
+                  }`}
+                  style={{
+                    backgroundColor: color.value,
+                    backgroundImage: 'url("/assets/builder_swatch.png")',
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  {isSelected && (
+                    <span className="flex justify-center items-center h-full">
+                      sel
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </label>
+        <button
+          onClick={() => {
+            if (pattern == "candy-stripe") {
+              nextStep("topping");
+            } else {
+              nextStep("detail");
+            }
+          }}
           className="bg-gray-800 text-white py-2 px-6 rounded hover:bg-blue-500"
         >
           Next
@@ -196,6 +289,13 @@ const Step3 = ({
     .map(String)
     .concat([...Array(26).keys()].map((i) => String.fromCharCode(i + 65)));
 
+  let arr = [];
+  if (club == "driver") {
+    arr = [1, 2, 3, 4];
+  } else if (club == "hybrid" || club == "fairway"){
+    arr = [1, 2];
+  }
+
   return (
     <div className="space-y-6 p-6">
       <div className="text-lg font-bold flex justify-between items-center bg-gray-800 text-white py-2 px-4">
@@ -241,6 +341,7 @@ const Step3 = ({
               setStripesColors([]);
               setDetailType(e.target.value);
             }}
+            value={detailType || ""}
           >
             <option value="">-select-</option>
             <option value="t-stripes"> TRADITIONAL STRIPES</option>
@@ -257,22 +358,33 @@ const Step3 = ({
               className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
               onChange={(e) => {
                 setStripesColors([]);
+                setInitial([]);
                 setStripesNum(e.target.value);
               }}
+              value={stripesNum || ""}
             >
               <option value="">-select-</option>
               <option value="1"> 1 STRIPE</option>
               {/* {club == "t-putter-blade" && (
                 <option value="2"> 2 STRIPES Alternating</option>
               )} */}
-              {club == "driver" && (
+              {club == "driver" ||
+                (club == "fairway" && (
+                  <>
+                    <option value="2"> 2 STRIPE</option>
+                    <option value="3"> 3 STRIPE</option>
+                    <option value="4"> 4 STRIPE</option>
+                    <option value="5"> 5 STRIPE</option>
+                    <option value="6"> 6 STRIPE</option>
+                    <option value="7"> 7 STRIPE</option>
+                  </>
+                ))}
+              {club == "hybrid" && (
                 <>
                   <option value="2"> 2 STRIPE</option>
                   <option value="3"> 3 STRIPE</option>
                   <option value="4"> 4 STRIPE</option>
                   <option value="5"> 5 STRIPE</option>
-                  <option value="6"> 6 STRIPE</option>
-                  <option value="7"> 7 STRIPE</option>
                 </>
               )}
             </select>
@@ -313,23 +425,69 @@ const Step3 = ({
         )}
         {detailType && detailType == "in-nu" && (
           <label className="block">
-            <span className="font-semibold text-gray-700">Select Numerals</span>
-            <select
-              id="detail"
-              className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
-              onChange={(e) => {
-                setInitial(e.target.value);
-              }}
-            >
-              <option value="" key="">
-                -select-
-              </option>
-              {values.map((value, key) => (
-                <option value={value} key={key}>
-                  {value}
-                </option>
-              ))}
-            </select>
+            {club == "driver" || club == "fairway" || club == "hybrid" ? (
+              <>
+                <span className="font-semibold text-gray-700">
+                  Select Numerals
+                </span>
+                <div className="flex">
+                  {arr.map((key) => (
+                    <select
+                      key={key}
+                      id="detail"
+                      className="w-[25%] border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm font-bold"
+                      onChange={(e) => {
+                        console.log(initial);
+                        setInitial((prevState) => {
+                          const newInitials = [...prevState];
+                          newInitials[key - 1] = e.target.value;
+                          if (newInitials[key - 1] === "") {
+                            newInitials.splice(key - 1, 1);
+                          }
+                          return newInitials;
+                        });
+                      }}
+                    >
+                      <option value="" key="">
+                        select
+                      </option>
+                      {values.map((value, key) => (
+                        <option value={value} key={key}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <select
+                  id="detail"
+                  className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
+                  onChange={(e) => {
+                    setInitial(e.target.value);
+                  }}
+                  // onChange={(e) => {
+                  //   setInitial((prevState) => {
+                  //     const newInitials = [...prevState];
+                  //     newInitials[key - 1] = e.target.value;
+                  //     return newInitials;
+                  //   });
+                  // }}
+                >
+                  <option value="" key="">
+                    -select-
+                  </option>
+                  {values.map((value, key) => (
+                    <option value={value} key={key}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
+
             {initial && (
               <label className="block mt-2">
                 <span className="font-semibold text-gray-700">
@@ -507,11 +665,72 @@ const StepToppings = ({
           )}
         </label>
         <button
-          onClick={nextStep}
+          onClick={() => nextStep("sleve")}
           className="bg-gray-800 text-white py-2 px-6 rounded hover:bg-blue-500"
         >
           Next
         </button>
+      </div>
+    </div>
+  );
+};
+
+const StepSleveLength = ({
+  setSleveLength,
+  sleveLength,
+  nextStep,
+  prevStep,
+}) => {
+  return (
+    <div className="space-y-6 p-6">
+      <div className="text-lg font-bold flex justify-between items-center bg-gray-800 text-white py-2 px-4">
+        <h2>Add Customization</h2>
+        <div className="flex items-center gap-2">
+          <button className="p-2 border rounded-full border-gray-400 hover:border-blue-500">
+            <i className="fa-solid fa-angle-left" />
+          </button>
+          <button className="p-2 border rounded-full border-gray-400 hover:border-blue-500">
+            <i className="fa-solid fa-angle-right" />
+          </button>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <label className="block">
+          <span className="font-semibold text-gray-700">
+            Customize Sleeve Length?
+          </span>
+          <select
+            id="club"
+            className="w-full border-b border-gray-300 bg-gray-100 p-2 mt-1 text-sm uppercase font-bold"
+            onChange={(e) => setSleveLength(e.target.value)}
+          >
+            <option value="">-select-</option>
+            <option value="0">NO CHANGES</option>
+            <option value="+2">EXTRA 2IN. ($5)</option>
+            <option value="-2">LESS 2IN. ($5)</option>
+          </select>
+        </label>
+        {sleveLength && (
+          <>
+            <span className="font-semibold text-gray-700 mt-2">
+              Special Requests
+            </span>
+            <textarea
+              id="s-request"
+              name="add-req"
+              className="w-full resize-none p-2"
+              rows="4"
+            ></textarea>
+          </>
+        )}
+        <Button
+          name="ADD TO CART"
+          width="w-full"
+          onClick={() => {
+            nextStep("color");
+          }}
+          disable={!sleveLength}
+        />
       </div>
     </div>
   );
@@ -596,10 +815,14 @@ const Builder = ({
   setToppingColors,
   toppingType,
   setToppingType,
+  sleveLength,
+  setSleveLength,
+  candyColor,
+  setCandyColor,
 }) => {
-  const goToNextStep = () => {
-    let nextStepIndex = currentStepIndex + 1;
-    if (nextStepIndex < steps.length) {
+  const goToNextStep = (stepName) => {
+    let nextStepIndex = steps.findIndex((step) => step.name === stepName);
+    if (nextStepIndex !== -1 && nextStepIndex < steps.length) {
       setHistory([...history, nextStepIndex]);
       setCurrentStepIndex(nextStepIndex);
     }
@@ -638,6 +861,18 @@ const Builder = ({
       ),
     },
     {
+      name: "candycolor",
+      component: (
+        <StepCandyColor
+          nextStep={goToNextStep}
+          setCandyColor={setCandyColor}
+          candyColor={candyColor}
+          pattern={pattern}
+          prevStep={goToPreviousStep}
+        />
+      ),
+    },
+    {
       name: "detail",
       component: (
         <Step3
@@ -671,21 +906,20 @@ const Builder = ({
       ),
     },
     {
+      name: "sleve",
+      component: (
+        <StepSleveLength
+          nextStep={goToNextStep}
+          sleveLength={sleveLength}
+          setSleveLength={setSleveLength}
+          prevStep={goToPreviousStep}
+        />
+      ),
+    },
+    {
       name: 4,
       component: <Step1 nextStep={goToNextStep} prevStep={goToPreviousStep} />,
     },
-    // {
-    //   name: "default",
-    //   component: (
-    //     <Step1
-    //       nextStep={goToNextStep}
-    //       club={club}
-    //       setClub={setClub}
-    //       pattern={pattern}
-    //       setPattern={setPattern}
-    //     />
-    //   ),
-    // },
   ];
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);

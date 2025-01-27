@@ -12,6 +12,7 @@ export const Button = ({
   disable,
   showBorder,
   isLoader,
+  width
 }) => {
   return (
     <>
@@ -19,7 +20,7 @@ export const Button = ({
         type={type}
         onClick={onClick}
         disabled={disable}
-        className="bg-gray-800 text-white py-2 px-6 rounded hover:bg-blue-500  disabled:bg-gray-400"
+        className={`bg-gray-800 text-white py-2 px-6 rounded hover:bg-blue-500  disabled:bg-gray-400 ${width ? width : ""}`}
         style={{ fontFamily: "br-semi-bold" }}
       >
         <span
