@@ -395,7 +395,6 @@ const Experience = () => {
         });
       }
     } else if (club == "t-putter-blade") {
-      console.log('cluc');
       if (pattern == "candy-stripe") {
         modelRef.current.traverse((child) => {
           if (candyColor.length > 0) {
@@ -417,7 +416,29 @@ const Experience = () => {
           }
         });
       }
-    } else if (club == "hybrid") {
+    } else if (club == "l-mallet-putter") {
+      if (pattern == "candy-stripe") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "PutterMallet-candy_main_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "PutterMallet-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "PutterMallet-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "PutterMallet-candy_head_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "PutterMallet-stripe1") {
+              child.material.color.set(candyColor[0]);
+            }
+          }
+        });
+      }
+    }else if (club == "hybrid") {
       console.log(pattern);
       if (pattern == "candy-neck") {
         modelRef.current.traverse((child) => {
@@ -536,7 +557,34 @@ const Experience = () => {
 
   useEffect(() => {
     if (club) {
-      if (club == "t-putter-blade") {
+      if (club == "w-putter-blade") {
+        if (pattern == "solid") {
+          if (modelRef.current && stripesColors) {
+            modelRef.current.traverse((child) => {
+              if (stripesNum == "1") {
+                if (child.isMesh && child.name === "OversizedPutter-stripe1") {
+                  child.material.color.set(stripesColors);
+                }
+              }
+            });
+          }
+        // } else if (pattern == "candy-stripe") {
+        //   modelRef.current.traverse((child) => {
+        //     if (child.isMesh && child.name === "PutterBladecandy_main_A") {
+        //       child.material.color.set(selectedColor[0]);
+        //     }
+        //     if (child.isMesh && child.name === "PutterBladecandy_main_B") {
+        //       child.material.color.set(selectedColor[1]);
+        //     }
+        //     if (child.isMesh && child.name === "PutterBladecandy_head_B") {
+        //       child.material.color.set(selectedColor[0]);
+        //     }
+        //     if (child.isMesh && child.name === "PutterBladecandy_head_A") {
+        //       child.material.color.set(selectedColor[1]);
+        //     }
+        //   });
+        }
+      } else if (club == "t-putter-blade") {
         if (pattern == "solid") {
           if (modelRef.current && stripesColors) {
             modelRef.current.traverse((child) => {
@@ -547,23 +595,36 @@ const Experience = () => {
               }
             });
           }
-        } else if (pattern == "candy-stripe") {
-          modelRef.current.traverse((child) => {
-            if (child.isMesh && child.name === "PutterBladecandy_main_A") {
-              child.material.color.set(selectedColor[0]);
-            }
-            if (child.isMesh && child.name === "PutterBladecandy_main_B") {
-              child.material.color.set(selectedColor[1]);
-            }
-            if (child.isMesh && child.name === "PutterBladecandy_head_B") {
-              child.material.color.set(selectedColor[0]);
-            }
-            if (child.isMesh && child.name === "PutterBladecandy_head_A") {
-              child.material.color.set(selectedColor[1]);
-            }
-          });
-        }
-      } else if (club == "driver") {
+        } 
+        // else if (pattern == "candy-stripe") {
+        //   modelRef.current.traverse((child) => {
+        //     if (child.isMesh && child.name === "PutterBladecandy_main_A") {
+        //       child.material.color.set(selectedColor[0]);
+        //     }
+        //     if (child.isMesh && child.name === "PutterBladecandy_main_B") {
+        //       child.material.color.set(selectedColor[1]);
+        //     }
+        //     if (child.isMesh && child.name === "PutterBladecandy_head_B") {
+        //       child.material.color.set(selectedColor[0]);
+        //     }
+        //     if (child.isMesh && child.name === "PutterBladecandy_head_A") {
+        //       child.material.color.set(selectedColor[1]);
+        //     }
+        //   });
+        // }
+      }else if (club == "l-mallet-putter") {
+        if (pattern == "solid") {
+          if (modelRef.current && stripesColors) {
+            modelRef.current.traverse((child) => {
+              if (stripesNum == "1") {
+                if (child.isMesh && child.name === "PutterMallet-stripe1") {
+                  child.material.color.set(stripesColors);
+                }
+              }
+            });
+          }
+        } 
+       } else if (club == "driver") {
         if (modelRef.current && stripesColors) {
           if (stripesColors.length > 0) {
             const selectedStripes = driverStripeGroups[stripesNum] || [];
@@ -671,6 +732,7 @@ const Experience = () => {
     setDetailType(null);
     setSelectedColor(null);
     setCandyColor([]);
+    setToppingModel(null);
   }, [club]);
 
   return (
