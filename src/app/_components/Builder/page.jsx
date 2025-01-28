@@ -447,6 +447,8 @@ const Step3 = ({
                           return newInitials;
                         });
                       }}
+                                // disabled={index > 0 && initial[index - 1] === ""} // Disable if the previous select is empty
+
                     >
                       <option value="" key="">
                         select

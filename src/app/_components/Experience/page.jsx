@@ -438,6 +438,29 @@ const Experience = () => {
           }
         });
       }
+    }
+    else if (club == "w-putter-blade") {
+      if (pattern == "candy-stripe") {
+        modelRef.current.traverse((child) => {
+          if (candyColor.length > 0) {
+            if (child.isMesh && child.name === "OversizedPutter-candy_main_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "OversizedPutter-candy_main_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "OversizedPutter-candy_head_A") {
+              child.material.color.set(candyColor[1]);
+            }
+            if (child.isMesh && child.name === "OversizedPutter-candy_head_B") {
+              child.material.color.set(candyColor[0]);
+            }
+            if (child.isMesh && child.name === "OversizedPutter-stripe1") {
+              child.material.color.set(candyColor[0]);
+            }
+          }
+        });
+      }
     }else if (club == "hybrid") {
       console.log(pattern);
       if (pattern == "candy-neck") {
@@ -735,6 +758,10 @@ const Experience = () => {
     setToppingModel(null);
   }, [club]);
 
+  useEffect(() => {
+
+  },[])
+
   return (
     <>
       <div className="my-3 text-3xl border-b-2 border-navy mx-4">
@@ -782,7 +809,7 @@ const Experience = () => {
                       ? "min-w-20"
                       : initial.length === 3
                       ? "min-w-24"
-                      : "min-w-38"
+                      : "min-w-36"
                   } min-w-14 max-w-fit border-2 cursor flex items-center justify-center`}
                   style={{
                     backgroundColor: selectedColor,
@@ -804,12 +831,12 @@ const Experience = () => {
                     <text
                       x="50%"
                       y={Array.isArray(initial) ? "75%" : "60%"}
-                      textAnchor="middle" // Horizontally center text
+                      textAnchor="middle"
                       fill={stripesColors}
                       fontSize="40"
                       fontWeight="bold"
                       fontFamily="Arial, sans-serif"
-                      alignmentBaseline="middle" // Vertically center the text within the SVG
+                      alignmentBaseline="middle"
                     >
                       {Array.isArray(initial)
                         ? initial.map((ini, index) => (
